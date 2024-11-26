@@ -1,9 +1,14 @@
 {
   "name": "thriftify-api",
+  "main": "./src/server.ts",
   "scripts": {
-    "dev": "bun run --hot src/index.ts"
+    "start": "bun run .",
+    "dev": "bun run --hot ."
   },
   "dependencies": {
+    "@electric-sql/pglite": "^0.2.13",
+    "drizzle-kit": "^0.28.1",
+    "drizzle-orm": "^0.36.4",
     "hono": "^4.6.11"
   },
   "devDependencies": {

@@ -8,13 +8,17 @@ export const verify_email = async (email: string) => {
 	return !!result
 }
 
-export const add_refresh_token = async (user_id: string, token: string) => {
+export const add_refresh_token = async (token: string) => {
 	const { auth } = schema
 	const [result] = await db
 		.insert(auth)
-		.values({
-			token,
-		})
+		.values({ token })
 		.returning({ token: auth.token })
+	return !!result
+}
+
+export const verify_refresh_token = async (token: string) => {
+	const { auth } = schema
+	const [result] = await db.select().from(auth).where(eq(auth.token, token))
 	return !!result
 }

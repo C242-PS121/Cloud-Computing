@@ -25,7 +25,7 @@ users.post('/', async (c) => {
 			pass_hash,
 		})
 		.returning({ id: users.id })
-    
+
 	if (!result) return c.json({ message: 'Failed to register user' }, 500)
 
 	return c.json({ id: result.id }, 201)

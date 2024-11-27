@@ -1,4 +1,5 @@
 import { defineConfig } from 'drizzle-kit'
+import { env } from 'bun'
 
 export default defineConfig({
 	out: './drizzle',
@@ -6,6 +7,6 @@ export default defineConfig({
 	dialect: 'postgresql',
 	driver: 'pglite',
 	dbCredentials: {
-		url: './.pglite_db',
+		url: process.env.DATABASE_URL,
 	},
 })

@@ -1,3 +1,4 @@
 node_modules/
 drizzle/
 .pglite_db
+.env

@@ -56,15 +56,15 @@ auth.put('/login', async (c) => {
 	const { refresh_token } = await c.req.json()
 
 	const { auth } = schema
-	const [{ token }] = await db
+	const [result] = await db
 		.select({
 			token: auth.token,
 		})
 		.from(auth)
 		.where(eq(auth.token, refresh_token))
 
-	if (!token) return c.json({ message: 'Invalid token' }, 401)
-	const valid_token = (await verify_refresh_token(token)) as TokenPayload
+	if (!result) return c.json({ message: 'Invalid token' }, 401)
+	const valid_token = (await verify_refresh_token(result.token)) as TokenPayload
 	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)
 
 	const [access_token, new_refresh_token] = await Promise.all([
@@ -89,6 +89,16 @@ auth.put('/login', async (c) => {
 	)
 })
 
-// auth.post('/logout', async (c) => {})
+auth.post('/logout', async (c) => {
+	const { refresh_token } = await c.req.json()
+
+	const valid_token = (await verify_refresh_token(refresh_token)) as TokenPayload
+	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)
+	
+	const { auth } = schema
+	await db.delete(auth).where(eq(auth.token, refresh_token))
+
+	return c.json({ message: 'Successfully logged out' })
+})
 
 export default auth

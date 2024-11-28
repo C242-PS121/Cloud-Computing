@@ -3,7 +3,8 @@
 	"main": "./src/server.ts",
 	"scripts": {
 		"start": "bun run .",
-		"dev": "bun run --hot ."
+		"dev": "bun run --watch .",
+		"db": "bun drizzle-kit"
 	},
 	"dependencies": {
 		"@electric-sql/pglite": "^0.2.13",

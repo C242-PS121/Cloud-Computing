@@ -3,11 +3,6 @@ import { db } from '../db'
 import schema from '../db/schema'
 import { eq } from 'drizzle-orm'
 
-import type { JWTPayload } from 'hono/utils/jwt/types'
-interface TokenPayload extends JWTPayload {
-	sub: string
-}
-
 import {
 	gen_access_token,
 	gen_refresh_token,
@@ -64,7 +59,7 @@ auth.put('/login', async (c) => {
 		.where(eq(auth.token, refresh_token))
 
 	if (!result) return c.json({ message: 'Invalid token' }, 401)
-	const valid_token = (await verify_refresh_token(result.token)) as TokenPayload
+	const valid_token = await verify_refresh_token(result.token)
 	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)
 
 	const [access_token, new_refresh_token] = await Promise.all([
@@ -92,9 +87,9 @@ auth.put('/login', async (c) => {
 auth.post('/logout', async (c) => {
 	const { refresh_token } = await c.req.json()
 
-	const valid_token = (await verify_refresh_token(refresh_token)) as TokenPayload
+	const valid_token = await verify_refresh_token(refresh_token)
 	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)
-	
+
 	const { auth } = schema
 	await db.delete(auth).where(eq(auth.token, refresh_token))
 

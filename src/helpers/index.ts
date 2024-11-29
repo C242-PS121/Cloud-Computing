@@ -3,6 +3,11 @@ import { db } from '../db'
 import schema from '../db/schema'
 import { sign, verify } from 'hono/jwt'
 
+import type { JWTPayload } from 'hono/utils/jwt/types'
+interface TokenPayload extends JWTPayload {
+	sub: string
+}
+
 export const verify_email = async (email: string) => {
 	const { users } = schema
 	const [result] = await db.select().from(users).where(eq(users.email, email))
@@ -27,5 +32,5 @@ export const gen_refresh_token = async (payload: string) => {
 }
 
 export const verify_refresh_token = async (token: string) => {
-	return await verify(token, Bun.env.REFRESH_TOKEN_SECRET)
+	return verify(token, Bun.env.REFRESH_TOKEN_SECRET) as Promise<TokenPayload>
 }

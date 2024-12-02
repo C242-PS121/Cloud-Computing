@@ -1,3 +1,4 @@
+import { messages } from '@electric-sql/pglite'
 import { z } from 'zod'
 
 export const post_login = z.object({
@@ -5,6 +6,23 @@ export const post_login = z.object({
     password: z.string().min(8),
 })
 
-export const put_del_login = z.object({
+export const put_login = z.object({
     refresh_token: z.string(),
+})
+
+export const del_login = put_login
+
+export const post_login_response = z.object({
+    message: z.literal('Successfully logged in'),
+    data: z.object({
+        access_token: z.string(),
+        refresh_token: z.string(),
+    }),
+})
+
+export const put_login_response = z.object({
+    message: z.literal('Successfully refreshed token'),
+    data: z.object({
+        access_token: z.string(),
+    }),
 })

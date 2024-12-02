@@ -1,11 +1,8 @@
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
 import { zValidator } from '@hono/zod-validator'
-import { db } from '../db'
-import schema from '../db/schema'
-import { eq } from 'drizzle-orm'
 
-import { post_login, put_del_login } from '../schema/auth'
+import { post_login, put_login, del_login } from '../schema/auth'
 import { get_user } from '../helpers/users'
 import {
 	add_refresh_token,
@@ -44,7 +41,7 @@ auth.post('/login', zValidator('json', post_login), async (c) => {
 	)
 })
 
-auth.put('/login', zValidator('json', put_del_login), async (c) => {
+auth.put('/login', zValidator('json', put_login), async (c) => {
 	const { refresh_token } = c.req.valid('json')
 
 	const result = await get_refresh_token(refresh_token)
@@ -66,7 +63,7 @@ auth.put('/login', zValidator('json', put_del_login), async (c) => {
 	)
 })
 
-auth.delete('/logout', zValidator('json', put_del_login), async (c) => {
+auth.delete('/logout', zValidator('json', del_login), async (c) => {
 	const { refresh_token } = c.req.valid('json')
 
 	const valid_token = await verify_refresh_token(refresh_token)

@@ -2,13 +2,16 @@ import './env'
 import { Hono } from 'hono'
 import { db } from './db'
 
+import docs from './routes/docs'
 import users from './routes/users'
 import auth from './routes/auth'
 import _dummy from './routes/_dummy'
 
 const app = new Hono()
+
+app.route('/api', docs)
 app.route('/users', users)
-app.route('/users', auth)
+app.route('/auth', auth)
 app.route('/dummy', _dummy) // Remove me later
 
 process.on('SIGINT', async () => {

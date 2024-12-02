@@ -7,8 +7,10 @@
 		"db": "bun drizzle-kit"
 	},
 	"dependencies": {
+		"@asteasolutions/zod-to-openapi": "^7.2.0",
 		"@electric-sql/pglite": "^0.2.13",
 		"@hono/zod-validator": "^0.4.1",
+		"@scalar/hono-api-reference": "^0.5.162",
 		"drizzle-kit": "^0.28.1",
 		"drizzle-orm": "^0.36.4",
 		"hono": "^4.6.11",

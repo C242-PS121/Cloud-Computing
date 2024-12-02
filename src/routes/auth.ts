@@ -1,40 +1,35 @@
 import { Hono } from 'hono'
+import { HTTPException } from 'hono/http-exception'
 import { db } from '../db'
 import schema from '../db/schema'
 import { eq } from 'drizzle-orm'
 
+import { get_user } from '../helpers/users'
 import {
+	add_refresh_token,
+	delete_refresh_token,
 	gen_access_token,
 	gen_refresh_token,
+	get_refresh_token,
 	verify_refresh_token,
-} from '../helpers'
+} from '../helpers/auth'
 
 const auth = new Hono()
 
 auth.post('/login', async (c) => {
 	const { email, password } = await c.req.json()
+	const account = await get_user(email)
 
-	const { users } = schema
-	const [account] = await db
-		.select({
-			id: users.id,
-			pass_hash: users.pass_hash,
-		})
-		.from(users)
-		.where(eq(users.email, email))
-
-	if (!account) return c.json({ message: 'Wrong credentials' }, 401)
+	if (!account) return c.json({ message: 'Wrong credentials' }, 401) // simplify
 	const match = await Bun.password.verify(password, account.pass_hash, 'bcrypt')
-	if (!match) return c.json({ message: 'Wrong credentials' }, 401)
+	if (!match) return c.json({ message: 'Wrong credentials' }, 401) // simplify
 
 	const [access_token, refresh_token] = await Promise.all([
 		gen_access_token(account.id),
 		gen_refresh_token(account.id),
 	])
 
-	const { auth } = schema
-	await db.insert(auth).values({ token: refresh_token })
-
+	await add_refresh_token(refresh_token)
 	return c.json(
 		{
 			message: 'Successfully logged in',
@@ -50,34 +45,19 @@ auth.post('/login', async (c) => {
 auth.put('/login', async (c) => {
 	const { refresh_token } = await c.req.json()
 
-	const { auth } = schema
-	const [result] = await db
-		.select({
-			token: auth.token,
-		})
-		.from(auth)
-		.where(eq(auth.token, refresh_token))
+	const result = await get_refresh_token(refresh_token)
+	if (!result) return c.json({ message: "Invalid token, token doesn't exist" }, 401)
 
-	if (!result) return c.json({ message: 'Invalid token' }, 401)
 	const valid_token = await verify_refresh_token(result.token)
 	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)
 
-	const [access_token, new_refresh_token] = await Promise.all([
-		gen_access_token(valid_token.sub),
-		gen_refresh_token(valid_token.sub),
-	])
-
-	await db
-		.update(auth)
-		.set({ token: new_refresh_token })
-		.where(eq(auth.token, refresh_token))
+	const access_token = await gen_access_token(valid_token.sub)
 
 	return c.json(
 		{
 			message: 'Successfully refreshed token',
 			data: {
 				access_token,
-				refresh_token: new_refresh_token,
 			},
 		},
 		201,
@@ -90,8 +70,8 @@ auth.post('/logout', async (c) => {
 	const valid_token = await verify_refresh_token(refresh_token)
 	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)
 
-	const { auth } = schema
-	await db.delete(auth).where(eq(auth.token, refresh_token))
+	const result = await delete_refresh_token(refresh_token)
+	if (!result) throw new HTTPException()
 
 	return c.json({ message: 'Successfully logged out' })
 })

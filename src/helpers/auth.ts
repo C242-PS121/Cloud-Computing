@@ -4,14 +4,11 @@ import schema from '../db/schema'
 import { sign, verify } from 'hono/jwt'
 
 import type { JWTPayload } from 'hono/utils/jwt/types'
-interface TokenPayload extends JWTPayload {
-	sub: string
-}
+type TokenPayload = JWTPayload & { sub: string }
 
-export const verify_email = async (email: string) => {
-	const { users } = schema
-	const [result] = await db.select().from(users).where(eq(users.email, email))
-	return !!result
+export const add_refresh_token = async (token: string) => {
+	const { auth } = schema
+	await db.insert(auth).values({ token })
 }
 
 export const delete_refresh_token = async (token: string) => {
@@ -21,6 +18,17 @@ export const delete_refresh_token = async (token: string) => {
 		.where(eq(auth.token, token))
 		.returning({ token: auth.token })
 	return !!result
+}
+
+export const get_refresh_token = async (token: string) => {
+	const { auth } = schema
+	const [result] = await db
+		.select({
+			token: auth.token,
+		})
+		.from(auth)
+		.where(eq(auth.token, token))
+	return result
 }
 
 export const gen_access_token = async (payload: string) => {

@@ -8,7 +8,7 @@ import _dummy from './routes/_dummy'
 
 const app = new Hono()
 app.route('/users', users)
-app.route('/auth', auth)
+app.route('/users', auth)
 app.route('/dummy', _dummy) // Remove me later
 
 process.on('SIGINT', async () => {

@@ -1,9 +1,11 @@
 import { Hono } from 'hono'
 import { HTTPException } from 'hono/http-exception'
+import { zValidator } from '@hono/zod-validator'
 import { db } from '../db'
 import schema from '../db/schema'
 import { eq } from 'drizzle-orm'
 
+import { post_login, put_del_login } from '../schema/auth'
 import { get_user } from '../helpers/users'
 import {
 	add_refresh_token,
@@ -16,8 +18,8 @@ import {
 
 const auth = new Hono()
 
-auth.post('/login', async (c) => {
-	const { email, password } = await c.req.json()
+auth.post('/login', zValidator('json', post_login), async (c) => {
+	const { email, password } = c.req.valid('json')
 	const account = await get_user(email)
 
 	if (!account) return c.json({ message: 'Wrong credentials' }, 401) // simplify
@@ -42,8 +44,8 @@ auth.post('/login', async (c) => {
 	)
 })
 
-auth.put('/login', async (c) => {
-	const { refresh_token } = await c.req.json()
+auth.put('/login', zValidator('json', put_del_login), async (c) => {
+	const { refresh_token } = c.req.valid('json')
 
 	const result = await get_refresh_token(refresh_token)
 	if (!result) return c.json({ message: "Invalid token, token doesn't exist" }, 401)
@@ -64,8 +66,8 @@ auth.put('/login', async (c) => {
 	)
 })
 
-auth.post('/logout', async (c) => {
-	const { refresh_token } = await c.req.json()
+auth.delete('/logout', zValidator('json', put_del_login), async (c) => {
+	const { refresh_token } = c.req.valid('json')
 
 	const valid_token = await verify_refresh_token(refresh_token)
 	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)

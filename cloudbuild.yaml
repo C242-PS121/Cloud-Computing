@@ -1,0 +1,14 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    id: Connect to instance
+    script: |
+      #!/bin/bash
+      mkdir -p ~/root/.ssh &&
+      gcloud secrets versions access latest --secret=cloud-build-ssh-key > ~/root/.ssh/id_cloud &&
+      chmod 600 ~/root/.ssh/id_cloud &&
+      gcloud secrets versions access latest --secret=cloud-build-ssh-key-pub > ~/root/.ssh/id_cloud.pub &&
+      chmod 600 ~/root/.ssh/id_cloud.pub &&
+      set -x &&
+      gcloud compute ssh hi@backend --ssh-key-file=~/root/.ssh/id_cloud --zone=asia-southeast2-b --command='sudo /bin/bash /home/hi/pull.sh'
+options:
+  logging: CLOUD_LOGGING_ONLY

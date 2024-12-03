@@ -7,7 +7,7 @@ export const post_login = z.object({
 })
 
 export const put_login = z.object({
-    refresh_token: z.string(),
+    refresh_token: z.string().min(1),
 })
 
 export const del_login = put_login

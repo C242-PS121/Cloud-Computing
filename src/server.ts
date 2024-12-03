@@ -5,14 +5,14 @@ import { db } from './db'
 import docs from './routes/docs'
 import users from './routes/users'
 import auth from './routes/auth'
-import _dummy from './routes/_dummy'
+import products from './routes/products'
 
 const app = new Hono()
 
 app.route('/api', docs)
 app.route('/users', users)
 app.route('/auth', auth)
-app.route('/dummy', _dummy) // Remove me later
+app.route('/products', products)
 
 process.on('SIGINT', async () => {
 	await db.$client.close()

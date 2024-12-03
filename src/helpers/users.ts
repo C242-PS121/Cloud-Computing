@@ -23,7 +23,7 @@ export const get_user = async (email: string) => {
 		.from(users)
 		.where(eq(users.email, email))
 
-	if (!result) throw new HTTPException()
+	if (!result) return false
 	return result
 }
 

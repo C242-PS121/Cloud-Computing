@@ -9,6 +9,6 @@ steps:
       gcloud secrets versions access latest --secret=cloud-build-ssh-key-pub > ~/root/.ssh/id_cloud.pub &&
       chmod 600 ~/root/.ssh/id_cloud.pub &&
       set -x &&
-      gcloud compute ssh hi@backend --ssh-key-file=~/root/.ssh/id_cloud --zone=asia-southeast2-b --command='sudo /bin/bash /home/hi/pull.sh'
+      gcloud compute ssh hi@2719066527459635648 --ssh-key-file=~/root/.ssh/id_cloud --zone=asia-southeast2-b --command='sudo /bin/bash /home/hi/pull.sh'
 options:
   logging: CLOUD_LOGGING_ONLY

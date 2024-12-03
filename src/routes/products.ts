@@ -20,4 +20,19 @@ products.post('/', zValidator('json', post_product), async (c) => {
 	}, 201)
 })
 
+products.get('/', async (c) => {
+	const result = await h.get_all_products()
+	return c.json({
+		data: result
+	})
+})
+
+products.get('/:id', async (c) => {
+	const id = c.req.param('id')
+	const result = await h.get_product(id)
+	return c.json({
+		data: result
+	})
+})
+
 export default products

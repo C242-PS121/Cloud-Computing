@@ -25,6 +25,7 @@ auth.post('/login', zValidator('json', post_login), async (c) => {
 		{
 			message: 'Successfully logged in',
 			data: {
+				user_id: account.id,
 				access_token,
 				refresh_token,
 			},

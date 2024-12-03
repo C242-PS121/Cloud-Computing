@@ -15,6 +15,7 @@ export const del_login = put_login
 export const post_login_response = z.object({
     message: z.literal('Successfully logged in'),
     data: z.object({
+        user_id: z.string(),
         access_token: z.string(),
         refresh_token: z.string(),
     }),

@@ -20,3 +20,24 @@ export const add_product = async (product: Product) => {
 	if (!result) throw new HTTPException()
 	return result
 }
+
+// E.g get in the homescreen
+export const get_all_products = async () => {
+	const { products } = schema
+	return await db
+		.select({
+			id: products.id,
+			name: products.name,
+			price: products.price,
+		})
+		.from(products)
+}
+
+// E.g get products detail after click
+export const get_product = async (id: string) => {
+	const { products } = schema
+	const [result] = await db.select().from(products).where(eq(products.id, id))
+
+	if (!result) throw new HTTPException(404, { message: 'Product not found' })
+	return result
+}

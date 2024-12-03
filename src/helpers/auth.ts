@@ -43,5 +43,9 @@ export const gen_refresh_token = async (payload: string) => {
 }
 
 export const verify_refresh_token = async (token: string) => {
-	return verify(token, Bun.env.REFRESH_TOKEN_SECRET) as Promise<TokenPayload>
+	try {
+		return await verify(token, Bun.env.REFRESH_TOKEN_SECRET) as TokenPayload
+	} catch (err) {
+		return false
+	}
 }

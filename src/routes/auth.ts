@@ -70,7 +70,7 @@ auth.delete('/logout', zValidator('json', del_login), async (c) => {
 	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)
 
 	const result = await delete_refresh_token(refresh_token)
-	if (!result) throw new HTTPException()
+	if (!result) return c.json({ message: "Invalid token" }, 401)
 
 	return c.json({ message: 'Successfully logged out' })
 })

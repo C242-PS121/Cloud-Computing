@@ -1,6 +1,6 @@
 import { eq } from 'drizzle-orm'
 import { db } from '../db'
-import schema from '../db/schema'
+import * as schema from '../db/schema'
 import { sign, verify } from 'hono/jwt'
 
 import type { JWTPayload } from 'hono/utils/jwt/types'

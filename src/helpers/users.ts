@@ -1,5 +1,5 @@
 import { db } from '../db'
-import schema from '../db/schema'
+import * as schema from '../db/schema'
 import { eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 

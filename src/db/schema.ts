@@ -1,4 +1,4 @@
-import { pgTable, text, varchar } from 'drizzle-orm/pg-core'
+import { pgTable, text, varchar, integer } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
 	id: varchar({ length: 36 }).primaryKey(),
@@ -10,8 +10,3 @@ export const users = pgTable('users', {
 export const auth = pgTable('auth', {
 	token: text().notNull(),
 })
-
-// Why double export?
-// the explicit export is because drizzle-kit doesn't detect default exports
-// causing no table to be created in the database
-export default { users, auth }

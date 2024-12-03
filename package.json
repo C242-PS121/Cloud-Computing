@@ -3,7 +3,7 @@
 	"main": "./src/server.ts",
 	"scripts": {
 		"start": "bun run .",
-		"dev": "bun run --watch .",
+		"dev": "bun run --hot .",
 		"db": "bun drizzle-kit"
 	},
 	"dependencies": {

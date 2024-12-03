@@ -1,5 +1,5 @@
 import { registry } from "..";
-import { post_user, user_response } from "../../schema/users";
+import { post_user, user_response } from "../../validator/users";
 import { z } from "zod";
 
 const bearerAuth = registry.registerComponent('securitySchemes', 'bearerAuth', {

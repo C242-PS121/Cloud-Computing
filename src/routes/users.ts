@@ -2,7 +2,7 @@ import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
 
 import { verify_email, add_user } from '../helpers/users'
-import { post_user } from '../schema/users'
+import { post_user } from '../validator/users'
 
 const users = new Hono()
 

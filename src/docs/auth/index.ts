@@ -5,7 +5,7 @@ import {
 	post_login_response,
 	put_login_response,
 	del_login,
-} from '../../schema/auth'
+} from '../../validator/auth'
 import { z } from 'zod'
 registry.registerPath({
 	method: 'post',

@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
 
-import { post_login, put_login, del_login } from '../schema/auth'
+import { post_login, put_login, del_login } from '../validator/auth'
 import { get_user } from '../helpers/users'
 import * as h from '../helpers/auth'
 

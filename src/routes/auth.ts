@@ -56,7 +56,7 @@ auth.put('/login', zValidator('json', put_login), async (c) => {
 	)
 })
 
-auth.delete('/logout', zValidator('json', del_login), async (c) => {
+auth.post('/logout', zValidator('json', del_login), async (c) => {
 	const { refresh_token } = c.req.valid('json')
 
 	const valid_token = await h.verify_refresh_token(refresh_token)

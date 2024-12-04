@@ -60,7 +60,7 @@ registry.registerPath({
 })
 
 registry.registerPath({
-	method: 'delete',
+	method: 'post',
 	path: '/auth/logout',
 	tags: ['Auth'],
 	description: 'Logout a user and delete refresh token from database',

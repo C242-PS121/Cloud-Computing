@@ -3,11 +3,11 @@ import * as schema from '../db/schema'
 import { eq } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 
-interface User {
+import type { z } from 'zod'
+import type { post_user } from '../validator/users'
+
+interface User extends z.infer<typeof post_user> {
 	id: string
-	fullname: string
-	email: string
-	pass_hash: string
 }
 
 export const verify_email = async (email: string) => {
@@ -28,7 +28,7 @@ export const get_user = async (email: string) => {
 }
 
 export const add_user = async (input: User) => {
-	const { id, fullname, email, pass_hash } = input
+	const { id, fullname, email, phone, password } = input
 
 	const { users } = schema
 	const [result] = await db
@@ -37,7 +37,8 @@ export const add_user = async (input: User) => {
 			id,
 			fullname,
 			email,
-			pass_hash,
+			phone,
+			pass_hash: password,
 		})
 		.returning({ id: users.id })
 

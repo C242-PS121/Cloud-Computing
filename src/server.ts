@@ -2,11 +2,11 @@ import './env'
 import { Hono } from 'hono'
 import { db } from './db'
 
-import docs from './routes/docs'
-import users from './routes/users'
 import auth from './routes/auth'
-import products from './routes/products'
+import docs from './routes/docs'
 import images from './routes/images'
+import products from './routes/products'
+import users from './routes/users'
 
 const app = new Hono()
 

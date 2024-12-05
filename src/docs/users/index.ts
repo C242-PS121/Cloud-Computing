@@ -1,13 +1,10 @@
+import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
-import { registry, bearerAuth } from '..'
+import * as schema from '../../validator/users'
+import { bearerAuth } from '../auth/auth_config'
 
-import {
-	post_user,
-	post_user_response,
-	get_user_response,
-} from '../../validator/users'
-
-registry.registerPath({
+const users_docs = new OpenAPIRegistry()
+users_docs.registerPath({
 	method: 'post',
 	path: '/users',
 	description: 'Register a user',
@@ -16,7 +13,7 @@ registry.registerPath({
 		body: {
 			content: {
 				'application/json': {
-					schema: post_user,
+					schema: schema.post_user,
 				},
 			},
 		},
@@ -26,14 +23,14 @@ registry.registerPath({
 			description: 'User created',
 			content: {
 				'application/json': {
-					schema: post_user_response,
+					schema: schema.post_user_response,
 				},
 			},
 		},
 	},
 })
 
-registry.registerPath({
+users_docs.registerPath({
 	method: 'get',
 	path: '/users/{id}',
 	description: 'Get user by id',
@@ -44,17 +41,19 @@ registry.registerPath({
 			description: 'The user details excluding the pass_hash',
 			content: {
 				'application/json': {
-					schema: get_user_response,
+					schema: schema.get_user_response,
 				},
 			},
 		},
-        401: {
-            description: "Unauthorized",
-            content: {
-                "text/plain": {
-                    schema: z.literal("Unauthorized")
-                }
-            }
-        }
+		401: {
+			description: 'Unauthorized',
+			content: {
+				'text/plain': {
+					schema: z.literal('Unauthorized'),
+				},
+			},
+		},
 	},
 })
+
+export default users_docs.definitions

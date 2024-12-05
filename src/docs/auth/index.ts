@@ -1,13 +1,10 @@
-import { registry } from '..'
-import {
-	post_login,
-	put_login,
-	post_login_response,
-	put_login_response,
-	del_login,
-} from '../../validator/auth'
+import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi'
 import { z } from 'zod'
-registry.registerPath({
+import * as schema from '../../validator/auth'
+
+const login_docs = new OpenAPIRegistry()
+
+login_docs.registerPath({
 	method: 'post',
 	path: '/auth/login',
 	description: 'Login as a user',
@@ -16,7 +13,7 @@ registry.registerPath({
 		body: {
 			content: {
 				'application/json': {
-					schema: post_login,
+					schema: schema.post_login,
 				},
 			},
 		},
@@ -26,14 +23,14 @@ registry.registerPath({
 			description: 'User created',
 			content: {
 				'application/json': {
-					schema: post_login_response,
+					schema: schema.post_login_response,
 				},
 			},
 		},
 	},
 })
 
-registry.registerPath({
+login_docs.registerPath({
 	method: 'put',
 	path: '/auth/login',
 	description: "Refresh a user's access token",
@@ -42,7 +39,7 @@ registry.registerPath({
 		body: {
 			content: {
 				'application/json': {
-					schema: put_login,
+					schema: schema.put_login,
 				},
 			},
 		},
@@ -52,14 +49,14 @@ registry.registerPath({
 			description: 'Successfully refreshed user access token',
 			content: {
 				'application/json': {
-					schema: put_login_response,
+					schema: schema.put_login_response,
 				},
 			},
 		},
 	},
 })
 
-registry.registerPath({
+login_docs.registerPath({
 	method: 'post',
 	path: '/auth/logout',
 	tags: ['Auth'],
@@ -68,7 +65,7 @@ registry.registerPath({
 		body: {
 			content: {
 				'application/json': {
-					schema: del_login,
+					schema: schema.del_login,
 				},
 			},
 		},
@@ -84,3 +81,5 @@ registry.registerPath({
 		},
 	},
 })
+
+export default login_docs.definitions

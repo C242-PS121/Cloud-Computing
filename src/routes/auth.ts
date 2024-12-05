@@ -1,9 +1,9 @@
-import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
+import { Hono } from 'hono'
 
-import { post_login, put_login, del_login } from '../validator/auth'
-import { get_user } from '../helpers/users'
 import * as h from '../helpers/auth'
+import { get_user } from '../helpers/users'
+import { del_login, post_login, put_login } from '../validator/auth'
 
 const auth = new Hono()
 
@@ -38,7 +38,8 @@ auth.put('/login', zValidator('json', put_login), async (c) => {
 	const { refresh_token } = c.req.valid('json')
 
 	const result = await h.get_refresh_token(refresh_token)
-	if (!result) return c.json({ message: "Invalid token, token doesn't exist" }, 401)
+	if (!result)
+		return c.json({ message: "Invalid token, token doesn't exist" }, 401)
 
 	const valid_token = await h.verify_refresh_token(result.token)
 	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)
@@ -63,7 +64,7 @@ auth.post('/logout', zValidator('json', del_login), async (c) => {
 	if (!valid_token) return c.json({ message: 'Invalid token' }, 401)
 
 	const result = await h.delete_refresh_token(refresh_token)
-	if (!result) return c.json({ message: "Invalid token" }, 401)
+	if (!result) return c.json({ message: 'Invalid token' }, 401)
 
 	return c.json({ message: 'Successfully logged out' })
 })

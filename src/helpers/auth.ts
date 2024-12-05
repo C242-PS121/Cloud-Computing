@@ -1,7 +1,7 @@
 import { eq } from 'drizzle-orm'
+import { sign, verify } from 'hono/jwt'
 import { db } from '../db'
 import * as schema from '../db/schema'
-import { sign, verify } from 'hono/jwt'
 
 import type { JWTPayload } from 'hono/utils/jwt/types'
 type TokenPayload = JWTPayload & { sub: string }
@@ -44,7 +44,7 @@ export const gen_refresh_token = async (payload: string) => {
 
 export const verify_refresh_token = async (token: string) => {
 	try {
-		return await verify(token, Bun.env.REFRESH_TOKEN_SECRET) as TokenPayload
+		return (await verify(token, Bun.env.REFRESH_TOKEN_SECRET)) as TokenPayload
 	} catch (err) {
 		return false
 	}

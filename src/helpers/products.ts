@@ -1,10 +1,10 @@
 import { eq } from 'drizzle-orm'
-import { db } from '../db'
 import { HTTPException } from 'hono/http-exception'
+import { db } from '../db'
 import * as schema from '../db/schema'
 
-import type { post_product } from '../validator/products'
 import type { z } from 'zod'
+import type { post_product } from '../validator/products'
 
 interface Product extends z.infer<typeof post_product> {
 	id: string
@@ -29,6 +29,7 @@ export const get_all_products = async () => {
 			id: products.id,
 			name: products.name,
 			price: products.price,
+			img: products.img_url,
 		})
 		.from(products)
 }

@@ -1,7 +1,7 @@
-import { db } from '../db'
-import * as schema from '../db/schema'
 import { eq, getTableColumns } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
+import { db } from '../db'
+import * as schema from '../db/schema'
 
 import type { z } from 'zod'
 import type { post_user } from '../validator/users'

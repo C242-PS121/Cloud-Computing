@@ -1,8 +1,8 @@
-import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
+import { Hono } from 'hono'
 
 import * as h from '../helpers/users'
-import { post_user, get_user } from '../validator/users'
+import { get_user, post_user } from '../validator/users'
 
 const users = new Hono()
 

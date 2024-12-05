@@ -19,5 +19,5 @@ if (!success) {
 	for (const issue of error.issues) {
 		console.error(`- ${issue.path}: ${issue.message}`)
 	}
-    process.exit(1)
+	process.exit(1)
 }

@@ -7,4 +7,7 @@ export const post_user = z.object({
 	fullname: z.string().min(1),
 })
 
-export const user_response = z.object({ id: z.string().length(36) })
+export const get_user = z.object({ id: z.string().length(36) })
+
+export const post_user_response = z.object({ id: z.string().length(36) })
+export const get_user_response = post_user.omit({ password: true })

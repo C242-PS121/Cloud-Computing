@@ -5,6 +5,11 @@ import {
 } from '@asteasolutions/zod-to-openapi'
 
 export const registry = new OpenAPIRegistry()
+export const bearerAuth = registry.registerComponent('securitySchemes', 'bearerAuth', {
+    type: 'http',
+    scheme: 'bearer',
+    bearerFormat: 'JWT'
+})
 
 // Anti-pattern bcoz side effect import, but it works lmao
 await import('../docs/users')

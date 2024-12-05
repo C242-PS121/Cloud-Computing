@@ -1,12 +1,6 @@
-import { registry } from "..";
-import { post_user, user_response } from "../../validator/users";
+import { registry, bearerAuth } from "..";
+import { post_user, post_user_response } from "../../validator/users";
 import { z } from "zod";
-
-const bearerAuth = registry.registerComponent('securitySchemes', 'bearerAuth', {
-    type: 'http',
-    scheme: 'bearer',
-    bearerFormat: 'JWT'
-})
 
 registry.registerPath({
     method: "get",

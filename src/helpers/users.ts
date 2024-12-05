@@ -1,6 +1,6 @@
 import { db } from '../db'
 import * as schema from '../db/schema'
-import { eq } from 'drizzle-orm'
+import { eq, getTableColumns } from 'drizzle-orm'
 import { HTTPException } from 'hono/http-exception'
 
 import type { z } from 'zod'
@@ -17,13 +17,23 @@ export const verify_email = async (email: string) => {
 }
 
 export const get_user = async (email: string) => {
-	const { users } = schema
 	const [result] = await db
 		.select()
-		.from(users)
-		.where(eq(users.email, email))
+		.from(schema.users)
+		.where(eq(schema.users.email, email))
 
 	if (!result) return false
+	return result
+}
+
+export const get_user_by_id = async (user_id: string) => {
+	const { id, pass_hash, ...without_pass } = getTableColumns(schema.users)
+	const [result] = await db
+		.select({ ...without_pass })
+		.from(schema.users)
+		.where(eq(schema.users.id, user_id))
+
+	if (!result) throw new HTTPException()
 	return result
 }
 

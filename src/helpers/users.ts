@@ -33,7 +33,7 @@ export const get_user_by_id = async (user_id: string) => {
 		.from(schema.users)
 		.where(eq(schema.users.id, user_id))
 
-	if (!result) throw new HTTPException()
+	if (!result) throw new HTTPException(404)
 	return result
 }
 

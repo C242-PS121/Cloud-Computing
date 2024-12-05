@@ -53,6 +53,14 @@ users_docs.registerPath({
 				},
 			},
 		},
+		404: {
+			description: 'User not found',
+			content: {
+				'text/plain': {
+					schema: z.literal('404 Not found'),
+				},
+			},
+		},
 	},
 })
 

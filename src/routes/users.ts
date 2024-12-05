@@ -1,9 +1,11 @@
 import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
+import { jwt } from 'hono/jwt'
 
 import * as h from '../helpers/users'
 import { get_user, post_user } from '../validator/users'
 
+const secret = Bun.env.ACCESS_TOKEN_SECRET
 const users = new Hono()
 
 users.post('/', zValidator('json', post_user), async (c) => {
@@ -19,7 +21,7 @@ users.post('/', zValidator('json', post_user), async (c) => {
 	return c.json({ id: result.id }, 201)
 })
 
-users.get('/:id', zValidator('param', get_user), async (c) => {
+users.get('/:id', jwt({secret}), zValidator('param', get_user), async (c) => {
 	const { id } = c.req.valid('param')
 	const result = await h.get_user_by_id(id)
 

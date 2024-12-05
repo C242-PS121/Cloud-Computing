@@ -1,9 +1,16 @@
-import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi'
+import {
+	OpenAPIRegistry,
+	extendZodWithOpenApi,
+} from '@asteasolutions/zod-to-openapi'
+
 import { z } from 'zod'
 import * as schema from '../../validator/users'
 import { bearerAuth } from '../auth/auth_config'
 
+extendZodWithOpenApi(z)
+
 const users_docs = new OpenAPIRegistry()
+
 users_docs.registerPath({
 	method: 'post',
 	path: '/users',

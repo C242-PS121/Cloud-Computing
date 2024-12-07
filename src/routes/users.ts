@@ -21,11 +21,9 @@ users.post('/', zValidator('json', post_user), async (c) => {
 	return c.json({ id: result.id }, 201)
 })
 
-users.get('/:id', jwt({secret}), zValidator('param', get_user), async (c) => {
+users.get('/:id', jwt({ secret }), zValidator('param', get_user), async (c) => {
 	const { id } = c.req.valid('param')
-	const result = await h.get_user_by_id(id)
-
-	return c.json({ data: result })
+	return c.json({ data: await h.get_user_by_id(id) })
 })
 
 export default users

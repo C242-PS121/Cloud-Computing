@@ -5,15 +5,14 @@ import { type JwtVariables, jwt } from 'hono/jwt'
 import { z } from 'zod'
 
 import { upload } from '../helpers/images'
-
-const form_schema = z.object({ image: z.instanceof(File) })
+import { post_image } from '../validator/images'
 
 const image = new Hono<{ Variables: JwtVariables }>().use(
 	jwt({ secret: Bun.env.ACCESS_TOKEN_SECRET }),
 	bodyLimit({ maxSize: 1024 * 1000 * 5 }),
 )
 
-image.post('/upload', zValidator('form', form_schema), async (c) => {
+image.post('/upload', zValidator('form', post_image), async (c) => {
 	const { image } = c.req.valid('form')
 
 	const ext = image.name.split('.').pop()?.toLowerCase() || 'png'

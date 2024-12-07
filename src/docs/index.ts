@@ -3,8 +3,9 @@ import { OpenApiGeneratorV31 } from '@asteasolutions/zod-to-openapi'
 import login_docs from './auth'
 import auth_config from './auth/auth_config'
 import users_docs from './users'
+import image_docs from './images'
 
-const definitions = [...auth_config, ...users_docs, ...login_docs]
+const definitions = [...auth_config, ...users_docs, ...login_docs, ...image_docs]
 
 const openAPI = new OpenApiGeneratorV31(definitions).generateDocument({
 	openapi: '3.1.0',

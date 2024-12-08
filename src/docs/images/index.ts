@@ -6,7 +6,7 @@ const images = new OpenAPIRegistry()
 
 images.registerPath({
     method: 'post',
-    path: '/upload',
+    path: '/images/upload',
     tags: ['Images'],
     description: 'Upload an image to Google Cloud Storage, returns a publicly accessible URL',
     security: [{ [bearerAuth.name]: [] }],

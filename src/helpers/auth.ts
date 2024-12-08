@@ -33,7 +33,7 @@ export const get_refresh_token = async (token: string) => {
 
 export const gen_access_token = async (payload: string) => {
 	return sign(
-		{ sub: payload, exp: Math.floor(Date.now() / 1000) + 60 * 30 },
+		{ sub: payload, exp: Math.floor(Date.now() / 1000) + 60 * 5 },
 		Bun.env.ACCESS_TOKEN_SECRET,
 	)
 }

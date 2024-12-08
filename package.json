@@ -7,7 +7,7 @@
 		"db": "bun drizzle-kit"
 	},
 	"dependencies": {
-		"@asteasolutions/zod-to-openapi": "^7.2.0",
+		"@asteasolutions/zod-to-openapi": "^7.3.0",
 		"@electric-sql/pglite": "^0.2.14",
 		"@google-cloud/storage": "^7.14.0",
 		"@hono/zod-validator": "^0.4.1",
@@ -21,5 +21,7 @@
 		"@biomejs/biome": "1.9.4",
 		"@types/bun": "latest"
 	},
-	"trustedDependencies": ["@biomejs/biome"]
+	"trustedDependencies": [
+		"@biomejs/biome"
+	]
 }

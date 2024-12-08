@@ -1,3 +1,4 @@
+import { sql } from 'drizzle-orm';
 import { boolean, integer, pgTable, text, varchar } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
@@ -14,10 +15,11 @@ export const auth = pgTable('auth', {
 
 export const products = pgTable('products', {
 	id: varchar({ length: 36 }).primaryKey(),
-	owner: varchar({ length: 36 })
+	owner_id: varchar({ length: 36 })
 		.notNull()
 		.references(() => users.id, { onDelete: 'cascade' }),
-	img_url: text().notNull(),
+	main_img_url: text().notNull(),
+	image_urls: text().array().default(sql`ARRAY[]::text[]`),
 	name: text().notNull(),
 	price: integer().notNull(),
 	description: text().notNull(),

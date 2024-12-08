@@ -30,7 +30,7 @@ export const get_all_products = async () => {
 			id: products.id,
 			name: products.name,
 			price: products.price,
-			img: products.img_url,
+			img: products.main_img_url,
 		})
 		.from(products)
 }
@@ -58,7 +58,7 @@ export const edit_product = async (id: string, product: EditProduct) => {
 
 export const delete_product = async (id: string) => {
 	const { products } = schema
-	const result = await db
+	const [result] = await db
 		.delete(products)
 		.where(eq(products.id, id))
 		.returning({ id: products.id })

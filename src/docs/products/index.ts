@@ -1,18 +1,21 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
-import { post_product } from '../../validator/products';
+import * as schema from '../../validator/products';
+import { bearerAuth } from '../auth/auth_config'
+import { z } from 'zod';
 
 const products = new OpenAPIRegistry();
 
 products.registerPath({
   method: 'post',
   path: '/products',
+  security: [{ [bearerAuth.name]: [] }],
   tags: ['Products'],
   summary: 'Add a new product',
   request: {
     body: {
       content: {
         'application/json': {
-          schema: post_product,
+          schema: schema.post_product,
         },
       },
     },
@@ -22,16 +25,18 @@ products.registerPath({
       description: 'Product added successfully',
       content: {
         'application/json': {
-          schema: {
-            type: 'object',
-            properties: {
-              message: { type: 'string', example: 'Product added' },
-              data: { type: 'object' }, // Adjust if you have a specific product schema
-            },
-          },
+          schema: schema.post_product_response
         },
       },
     },
+		401: {
+			description: 'Unauthorized',
+			content: {
+				'text/plain': {
+					schema: z.literal('Unauthorized'),
+				},
+			},
+		},
   },
 });
 
@@ -39,30 +44,32 @@ products.registerPath({
   method: 'get',
   path: '/products',
   tags: ['Products'],
+  security: [{ [bearerAuth.name]: [] }],
   summary: 'Get all products',
   responses: {
     200: {
       description: 'List of all products',
       content: {
         'application/json': {
-          schema: {
-            type: 'object',
-            properties: {
-              data: { 
-                type: 'array',
-                items: { type: 'object' }, // Adjust to match your product schema
-              },
-            },
-          },
+          schema: schema.get_allproduct_response
         },
       },
     },
+    401: {
+			description: 'Unauthorized',
+			content: {
+				'text/plain': {
+					schema: z.literal('Unauthorized'),
+				},
+			},
+		},
   },
 });
 
 products.registerPath({
   method: 'get',
   path: '/products/{id}',
+  security: [{ [bearerAuth.name]: [] }],
   tags: ['Products'],
   summary: 'Get a product by ID',
   parameters: [
@@ -79,21 +86,33 @@ products.registerPath({
       description: 'Product details',
       content: {
         'application/json': {
-          schema: {
-            type: 'object',
-            properties: {
-              data: { type: 'object' }, // Adjust to match your product schema
-            },
-          },
+          schema: schema.get_product_response
         },
       },
     },
+    401: {
+			description: 'Unauthorized',
+			content: {
+				'text/plain': {
+					schema: z.literal('Unauthorized'),
+				},
+			},
+		},
+    404: {
+			description: 'Not found',
+			content: {
+				'text/plain': {
+					schema: z.literal('404 Not found'),
+				},
+			},
+		},
   },
 });
 
 products.registerPath({
   method: 'put',
   path: '/products/{id}',
+  security: [{ [bearerAuth.name]: [] }],
   tags: ['Products'],
   summary: 'Update a product by ID',
   parameters: [
@@ -109,7 +128,7 @@ products.registerPath({
     body: {
       content: {
         'application/json': {
-          schema: post_product,
+          schema: schema.put_product,
         },
       },
     },
@@ -119,22 +138,33 @@ products.registerPath({
       description: 'Product updated successfully',
       content: {
         'application/json': {
-          schema: {
-            type: 'object',
-            properties: {
-              message: { type: 'string', example: 'Product updated' },
-              data: { type: 'object' }, // Adjust to match your product schema
-            },
-          },
+          schema: schema.put_product_response
         },
       },
     },
+    401: {
+			description: 'Unauthorized',
+			content: {
+				'text/plain': {
+					schema: z.literal('Unauthorized'),
+				},
+			},
+		},
+    404: {
+			description: 'Not found',
+			content: {
+				'text/plain': {
+					schema: z.literal('404 Not found'),
+				},
+			},
+		},
   },
 });
 
 products.registerPath({
   method: 'delete',
   path: '/products/{id}',
+    security: [{ [bearerAuth.name]: [] }],
   tags: ['Products'],
   summary: 'Delete a product by ID',
   parameters: [
@@ -143,7 +173,7 @@ products.registerPath({
       in: 'path',
       required: true,
       schema: { type: 'string' },
-      description: 'ID of the product to dePlete',
+      description: 'ID of the product to delete',
     },
   ],
   responses: {
@@ -151,16 +181,31 @@ products.registerPath({
       description: 'Product deleted successfully',
       content: {
         'application/json': {
-          schema: {
-            type: 'object',
-            properties: {
-              message: { type: 'string', example: 'Product deleted' },
-              data: { type: 'object' }, // Adjust if needed
-            },
-          },
+          schema: z.object({
+            message: z.literal('Product deleted'),
+            data: z.object({
+              id: z.string().length(36),
+            })
+          })
         },
       },
     },
+    401: {
+			description: 'Unauthorized',
+			content: {
+				'text/plain': {
+					schema: z.literal('Unauthorized'),
+				},
+			},
+		},
+    404: {
+			description: 'Not found',
+			content: {
+				'text/plain': {
+					schema: z.literal('404 Not found'),
+				},
+			},
+		},
   },
 });
 

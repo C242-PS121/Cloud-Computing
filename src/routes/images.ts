@@ -21,7 +21,7 @@ image.post('/upload', zValidator('form', post_image), async (c) => {
 
 	return c.json({
 		message: 'Image uploaded successfully',
-		url: result,
+		data: { url: result },
 	})
 })
 

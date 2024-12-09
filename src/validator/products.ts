@@ -3,7 +3,7 @@ import { z } from 'zod'
 export const post_product = z.object({
 	owner_id: z.string().length(36),
 	main_img_url: z.string().url(),
-	image_urls: z.array(z.string().url()),
+	image_urls: z.array(z.string().url()).optional(),
 	name: z.string().min(1),
 	price: z.number().int().nonnegative(),
 	description: z.string().min(1),

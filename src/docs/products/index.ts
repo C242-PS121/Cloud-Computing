@@ -1,5 +1,6 @@
 import { OpenAPIRegistry } from '@asteasolutions/zod-to-openapi';
 import * as schema from '../../validator/products';
+import { schema as product_v2 } from '../../routes/products_v2';
 import { bearerAuth } from '../auth/auth_config'
 import { z } from 'zod';
 
@@ -10,7 +11,6 @@ products.registerPath({
   path: '/products',
   security: [{ [bearerAuth.name]: [] }],
   tags: ['Products'],
-  summary: 'Add a new product',
   request: {
     body: {
       content: {
@@ -41,11 +41,49 @@ products.registerPath({
 });
 
 products.registerPath({
+  method: 'post',
+  path: '/v2/products',
+  security: [{ [bearerAuth.name]: [] }],
+  tags: ['Products'],
+  request: {
+    body: {
+      content: {
+        'multipart/form-data': {
+          schema: product_v2
+        }
+      }
+    },
+  },
+  responses: {
+    201: {
+      description: 'Product added successfully',
+      content: {
+        'application/json': {
+          schema: z.object({
+            message: z.literal('Product added'),
+            data: z.object({
+              id: z.string().length(36),
+            })
+          })
+        },
+      },
+    },
+    401: {
+      description: 'Unauthorized',
+      content: {
+        'text/plain': {
+          schema: z.literal('Unauthorized'),
+        },
+      },
+    },
+  }
+})
+
+products.registerPath({
   method: 'get',
   path: '/products',
   tags: ['Products'],
   security: [{ [bearerAuth.name]: [] }],
-  summary: 'Get all products',
   responses: {
     200: {
       description: 'List of all products',
@@ -71,7 +109,6 @@ products.registerPath({
   path: '/products/{id}',
   security: [{ [bearerAuth.name]: [] }],
   tags: ['Products'],
-  summary: 'Get a product by ID',
   parameters: [
     {
       name: 'id',
@@ -114,7 +151,6 @@ products.registerPath({
   path: '/products/{id}',
   security: [{ [bearerAuth.name]: [] }],
   tags: ['Products'],
-  summary: 'Update a product by ID',
   parameters: [
     {
       name: 'id',
@@ -166,7 +202,6 @@ products.registerPath({
   path: '/products/{id}',
     security: [{ [bearerAuth.name]: [] }],
   tags: ['Products'],
-  summary: 'Delete a product by ID',
   parameters: [
     {
       name: 'id',

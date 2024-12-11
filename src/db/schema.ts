@@ -24,5 +24,6 @@ export const products = pgTable('products', {
 	price: integer().notNull(),
 	description: text().notNull(),
 	clothing_type: text().notNull(),
+	clothing_usage: text().notNull(),
 	sold: boolean().notNull().default(false),
 })

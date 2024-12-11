@@ -7,7 +7,8 @@ export const post_product = z.object({
 	name: z.string().min(1),
 	price: z.number().int().nonnegative(),
 	description: z.string().min(1),
-	clothing_type: z.string().min(1)
+	clothing_type: z.string().min(1),
+	clothing_usage: z.string().min(1),
 })
 
 export const put_product = post_product.omit({ owner_id: true })

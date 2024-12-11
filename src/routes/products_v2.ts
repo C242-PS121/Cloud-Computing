@@ -16,7 +16,8 @@ export const schema = z.object({
 	name: z.string().min(1),
 	price: z.coerce.number().int().nonnegative(),
 	description: z.string().min(1),
-	clothing_type: z.string().min(1)
+	clothing_type: z.string().min(1),
+	clothing_usage: z.string().min(1),
 })
 
 products.post('/', zValidator('form', schema), async (c) => {

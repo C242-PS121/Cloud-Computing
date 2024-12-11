@@ -19,7 +19,8 @@ app.route('/v2/products', products_v2)
 app.route('/images', images)
 
 process.on('SIGINT', async () => {
-	await db.$client.close()
+	// await db.$client.close()
+	await db.$client.end()
 	console.log('\n' + 'Exiting...')
 	process.exit(0)
 })

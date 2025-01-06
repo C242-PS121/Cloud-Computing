@@ -1,7 +1,8 @@
 import { Storage } from '@google-cloud/storage'
 import { HTTPException } from 'hono/http-exception'
 
-const storage = new Storage()
+const keyFilename = Bun.env.NODE_ENV === 'production' ? undefined : './.bucket.key.json'
+const storage = new Storage({ keyFilename })
 
 export async function upload(path: string, image: File): Promise<string> {
 	const binary = new Uint8Array(await image.arrayBuffer())

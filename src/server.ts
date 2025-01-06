@@ -1,6 +1,5 @@
 import './env'
 import { Hono } from 'hono'
-import { db } from './db'
 
 import auth from './routes/auth'
 import docs from './routes/docs'
@@ -19,15 +18,12 @@ app.route('/v2/products', products_v2)
 app.route('/images', images)
 
 process.on('SIGINT', async () => {
-	// await db.$client.close()
-	await db.$client.end()
 	console.log('\n' + 'Exiting...')
 	process.exit(0)
 })
 
-const is_prod = Bun.env.NODE_ENV === 'production'
 export default {
-	hostname: is_prod ? '0.0.0.0' : 'localhost',
-	port: Bun.env.PORT,
+	hostname: Bun.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',
+	port: Bun.env.PORT || 8080,
 	fetch: app.fetch,
 }

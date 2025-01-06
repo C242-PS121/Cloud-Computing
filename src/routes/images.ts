@@ -2,7 +2,6 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { bodyLimit } from 'hono/body-limit'
 import { type JwtVariables, jwt } from 'hono/jwt'
-import { z } from 'zod'
 
 import { upload } from '../helpers/images'
 import { post_image } from '../validator/images'

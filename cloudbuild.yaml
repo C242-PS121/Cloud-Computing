@@ -1,0 +1,26 @@
+steps:
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['secrets', 'versions', 'access', 'latest', '--secret=env-vars', '--out-file=.env']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'asia-southeast2-docker.pkg.dev/$PROJECT_ID/${_REGISTRY}/${_IMAGE}:${_TAG}', '.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'asia-southeast2-docker.pkg.dev/$PROJECT_ID/${_REGISTRY}/${_IMAGE}:${_TAG}']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args: ['run', 'deploy', '${_IMAGE}', 
+           '--image=asia-southeast2-docker.pkg.dev/$PROJECT_ID/${_REGISTRY}/${_IMAGE}:${_TAG}',
+           '--region=asia-southeast2', '--allow-unauthenticated', '--cpu=2', '--memory=1Gi',
+           '--execution-environment=gen1' ]
+
+substitutions:
+    _REGISTRY: thriftify-registry
+    _IMAGE: thriftify-backend
+    _TAG: latest
+
+images: ['asia-southeast2-docker.pkg.dev/$PROJECT_ID/${_REGISTRY}/${_IMAGE}:${_TAG}']
+options:
+  logging: CLOUD_LOGGING_ONLY

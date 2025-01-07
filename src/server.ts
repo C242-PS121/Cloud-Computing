@@ -17,10 +17,15 @@ app.route('/products', products)
 app.route('/v2/products', products_v2)
 app.route('/images', images)
 
-process.on('SIGINT', async () => {
-	console.log('\n' + 'Exiting...')
-	process.exit(0)
-})
+app.notFound(c => c.newResponse(null, 404))
+
+const signals = ['SIGINT', 'SIGTERM']
+for (const signal of signals) {
+	process.on(signal, () => {
+		console.log('\n' + 'Shutting down...')
+		process.exit(0)
+	})
+}
 
 export default {
 	hostname: Bun.env.NODE_ENV === 'production' ? '0.0.0.0' : 'localhost',

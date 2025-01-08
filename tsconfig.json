@@ -3,5 +3,6 @@
 		"target": "ESNext",
 		"module": "Preserve",
 		"strict": true,
+		"types": ["bun-types"]
 	}
 }

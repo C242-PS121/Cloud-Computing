@@ -1,18 +1,28 @@
-import { Storage } from '@google-cloud/storage'
+import { S3Client } from "bun";
 import { HTTPException } from 'hono/http-exception'
 
-const keyFilename = Bun.env.NODE_ENV === 'production' ? undefined : './.bucket.key.json'
-const storage = new Storage({ keyFilename })
+const endpoint = "https://storage.googleapis.com"
+const bucket = Bun.env.BUCKET_NAME
 
-export async function upload(path: string, image: File): Promise<string> {
-	const binary = new Uint8Array(await image.arrayBuffer())
-	const file = storage.bucket(Bun.env.BUCKET_NAME).file(path)
-	const public_url = decodeURIComponent(file.publicUrl())
+enum Folder {
+	Images = 'clothing',
+	// for future use
+}
 
-	return new Promise((resolve, reject) => {
-		file.save(binary, { contentType: image.type, resumable: false }, (err) => {
-			if (err) reject(new HTTPException())
-			resolve(public_url)
-		})
+const gcs = new S3Client({
+	accessKeyId: Bun.env.S3_ACCESS_KEY_ID,
+	secretAccessKey: Bun.env.S3_SECRET_ACCESS_KEY,
+	endpoint,
+	bucket
+})
+
+export async function upload(dest: `${Folder}/${string}`, image: File) {
+	const bucket = gcs.file(dest)
+	const public_url = `${endpoint}/${bucket}/${dest}`
+
+	await bucket.write(image).catch(e => {
+		throw new HTTPException()
 	})
+
+	return public_url
 }

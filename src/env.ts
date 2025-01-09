@@ -5,6 +5,8 @@ const schema = z.object({
 	BUCKET_NAME: z.string().min(1),
 	ACCESS_TOKEN_SECRET: z.string().min(1),
 	REFRESH_TOKEN_SECRET: z.string().min(1),
+	S3_ACCESS_KEY_ID: z.string().min(1),
+	S3_SECRET_ACCESS_KEY: z.string().min(1),
 })
 
 /** @see: https://bun.sh/docs/runtime/env#typescript */

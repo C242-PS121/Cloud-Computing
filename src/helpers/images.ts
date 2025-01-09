@@ -17,10 +17,10 @@ const gcs = new S3Client({
 })
 
 export async function upload(dest: `${Folder}/${string}`, image: File) {
-	const bucket = gcs.file(dest)
+	const file = gcs.file(dest)
 	const public_url = `${endpoint}/${bucket}/${dest}`
 
-	await bucket.write(image).catch(e => {
+	await file.write(image).catch(e => {
 		throw new HTTPException()
 	})
 

@@ -23,7 +23,7 @@ export const schema = z.object({
 products.post('/', zValidator('form', schema), async (c) => {
 	const id = Bun.randomUUIDv7()
 	const product_payload = c.req.valid('form')
-    const url = await upload(`images/${id}`, product_payload.image)
+    const url = await upload(`clothing/${id}`, product_payload.image)
 
 	const result = await h.add_product({ id, main_img_url: url, ...product_payload })
 	return c.json(

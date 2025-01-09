@@ -16,7 +16,7 @@ image.post('/upload', zValidator('form', post_image), async (c) => {
 
 	const ext = image.name.split('.').pop()?.toLowerCase() || 'png'
 	const filename = `${Bun.randomUUIDv7()}.${ext}`
-	const result = await upload(`images/${filename}`, image)
+	const result = await upload(`clothing/${filename}`, image)
 
 	return c.json({
 		message: 'Image uploaded successfully',
